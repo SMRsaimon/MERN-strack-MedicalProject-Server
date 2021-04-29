@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const ObjectID = require("mongodb").ObjectID
 app.use(cors());
 app.use(express.json())
 require('dotenv').config()
@@ -26,10 +27,26 @@ client.connect(err => {
         console.log(result.insertedCount)
 
       })
-
   });
 
+  // user appoinment
+  app.get("/singlePersonAppoinment", (req, res) => {
 
+    appoinmentCollection.find({})
+      .toArray((err, collection) => {
+
+        res.json(collection)
+      })
+  });
+
+  // delete iTeam 
+  app.delete("/deleteAppoinment/:id", (req, res) => {
+
+    appoinmentCollection.deleteOne({ _id: ObjectID(req.params.id) })
+      .then(respons => {
+        res.send(respons.deletedCount > 0)
+      })
+  });
 
 
 });
